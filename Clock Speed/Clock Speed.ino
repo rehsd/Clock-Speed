@@ -20,14 +20,15 @@ void setup() {
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-	Wire.beginTransmission(9);
 	//Serial.println((int)currentClockSpeed);
 	int cClock = (int)currentClockSpeed;
-	Serial.println(cClock);
+	Serial.print(cClock);
+	Serial.print(".");
 	byte myArray[2];
 	myArray[0] = (cClock >> 8) & 0xFF;
 	myArray[1] = cClock & 0xFF;
 
+	Wire.beginTransmission(9);
 	Wire.write(myArray, 2);
 	Wire.endTransmission();
 	delay(1000);
@@ -39,7 +40,7 @@ void onClock() {
 	unsigned long currentMicros = micros();
 	float timeLapsed = (currentMicros - lastMicros) / 1000000.0;
 	//Serial.println(timeLapsed);
-	if (timeLapsed > .01)
+	if (timeLapsed > .1)
 	{
 		currentClockSpeed = pulses / timeLapsed;
 		//Serial.println(currentClockSpeed);
