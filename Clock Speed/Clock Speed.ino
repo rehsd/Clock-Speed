@@ -6,8 +6,8 @@
 
 #include<Wire.h>
 
-unsigned int pulses = 0;
-unsigned long lastMicros = 0;
+volatile unsigned int pulses = 0;
+volatile unsigned long lastMicros = 0;
 volatile float currentClockSpeed = 0.0;
 
 
@@ -15,7 +15,11 @@ volatile float currentClockSpeed = 0.0;
 void setup() {
 	pinMode(2, INPUT);	//clock
 	attachInterrupt(digitalPinToInterrupt(2), onClock, RISING);
+	Wire.setClock(10000);
+	Wire.setWireTimeout(50000, false);
+	Wire.setTimeout(50000);
 	Wire.begin();
+	Serial.begin(115200);
 }
 
 // the loop function runs over and over again until power down or reset
@@ -27,11 +31,18 @@ void loop() {
 	byte myArray[2];
 	myArray[0] = (cClock >> 8) & 0xFF;
 	myArray[1] = cClock & 0xFF;
-
+	
+	
 	Wire.beginTransmission(9);
 	Wire.write(myArray, 2);
 	Wire.endTransmission();
-	delay(1000);
+	
+	//increase loop count for additional delay between clock info sends
+	for (int i =0; i < 4; i++)
+	{
+		delay(500);
+		Serial.print(".");
+	}
 }
 
 void onClock() {
