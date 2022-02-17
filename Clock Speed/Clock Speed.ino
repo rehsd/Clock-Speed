@@ -65,9 +65,9 @@ void loop() {
 	Wire.endTransmission();
 	
 	display.clearDisplay();
-	display.setTextSize(4);             // Normal 1:1 pixel scale
+	display.setTextSize(4);						// Normal 1:1 pixel scale
 	display.setTextColor(SSD1306_WHITE);        // Draw white text
-	display.setCursor(0, 0);             // Start at top-left corner
+	display.setCursor(0, 0);					// Start at top-left corner
 	display.print(currentClockSpeed);
 	display.display();
 
@@ -77,9 +77,6 @@ void loop() {
 		delay(500);
 		Serial.print(".");
 	}
-
-
-	
 }
 
 void onClock() {
